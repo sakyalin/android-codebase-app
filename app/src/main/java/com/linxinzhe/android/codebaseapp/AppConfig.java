@@ -5,4 +5,5 @@ package com.linxinzhe.android.codebaseapp;
  */
 public class AppConfig {
     public static final String BASE_URL = "";
+    public static final String SP_FIRST_RUN = "is_first_run_app";
 }

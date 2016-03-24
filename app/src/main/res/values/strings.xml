@@ -9,5 +9,4 @@
     <string name="toast_request_param_wrong">请求成功，返回参数问题</string>
     <string name="toast_request_server_failed">请求服务器失败，错误码(code:%s)</string>
     <string name="toast_request_post_address_failed">服务器问题：请求地址变动</string>
-    <string name="title_activity_blank">BlankActivity</string>
 </resources>
