@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">CodeBaseApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <string name="toast_network_not_open">网络连接不可用，请检查网络环境</string>
+    <string name="toast_request_failed">当前请求失败</string>
+    <string name="toast_request_error">当前请求异常：</string>
+    <string name="toast_request_param_wrong">请求成功，返回参数问题</string>
+    <string name="toast_request_server_failed">请求服务器失败，错误码(code:%s)</string>
+    <string name="toast_request_post_address_failed">服务器问题：请求地址变动</string>
+    <string name="title_activity_blank">BlankActivity</string>
+</resources>

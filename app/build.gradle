@@ -1,0 +1,111 @@
+apply plugin: 'com.android.application'
+apply plugin: 'im.fir.plugin.gradle'
+apply plugin: 'realm-android'
+
+def releaseTime() {
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
+}
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        applicationId "com.linxinzhe.android.codebaseapp"
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 1
+        versionName "0.1"
+//        multiDexEnabled true
+        ndk {
+            //设置支持的SO库架构
+            abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+        }
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("app_release.jks")
+            storePassword "cJDVW97DahuwyK"
+            keyAlias "lxz"
+            keyPassword "cJDVW97DahuwyK"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            shrinkResources false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            manifestPlaceholders = [XXXMAP_API_KEY: "ds4ubnOVP9Y7B45l8GQEddXK"]
+        }
+        applicationVariants.all { variant ->
+            variant.outputs.each { output ->
+                def outputFile = output.outputFile
+                if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                    // 输出apk名称为CodeBase_v1.0_2015-01-15_wandoujia.apk
+                    def fileName = "CodeBase_v${defaultConfig.versionName}_${releaseTime()}_${variant.productFlavors[0].name}.apk"
+                    output.outputFile = new File(outputFile.parent, fileName)
+                }
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    productFlavors {
+        xxx {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "xxx", XXXMAP_API_KEY: "xxx"]
+        }
+    }
+}
+
+fir {
+    apiToken 'xx'
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+//    compile 'com.android.support:multidex:1.0.1'
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:support-v4:23.2.1'
+    compile 'com.android.support:appcompat-v7:23.2.1'
+    compile 'com.android.support:design:23.2.1'
+
+    compile 'io.reactivex:rxandroid:1.1.0'
+
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.squareup.okio:okio:1.6.0'
+    compile 'com.squareup.okhttp3:okhttp:3.2.0'
+    compile 'com.squareup.retrofit2:retrofit:2.0.0-beta4'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta4'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0-beta4'
+
+    compile 'com.github.orhanobut:logger:1.12'
+
+    compile 'org.greenrobot:eventbus:3.0.0'
+
+    compile 'in.srain.cube:ultra-ptr:1.0.10'
+    compile 'in.srain.cube:cube-sdk:1.0.44@aar'
+
+    compile 'me.dm7.barcodescanner:zxing:1.8.3'
+
+    compile 'com.umeng.analytics:analytics:latest.integration'
+    compile 'com.tencent.bugly:crashreport:1.2.9'
+}
