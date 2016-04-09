@@ -25,6 +25,7 @@ import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnItemClick;
 import in.srain.cube.util.LocalDisplay;
 import in.srain.cube.views.loadmore.LoadMoreContainer;
 import in.srain.cube.views.loadmore.LoadMoreHandler;
@@ -129,13 +130,12 @@ public class RefreshAndLoadMoreActivity extends BaseActivity {
             }
         });
 
-        mLvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                BizModel model = mBizModelList.get(position);
-                // do business
-            }
-        });
+    }
+
+    @OnItemClick(R.id.lv_list)
+    public void onLvListItemClick(AdapterView<?> parent, View view, int position, long id) {
+        BizModel model = mBizModelList.get(position);
+        // do business
     }
 
     private void postMsgByPageForLoadMore(final int start, final int end, final LoadMoreContainer loadMoreContainer) {
@@ -243,8 +243,8 @@ public class RefreshAndLoadMoreActivity extends BaseActivity {
         }
 
         @Override
-        public Object getItem(int position) {
-            return null;
+        public BizModel getItem(int position) {
+            return mBizModelList.get(position);
         }
 
         @Override

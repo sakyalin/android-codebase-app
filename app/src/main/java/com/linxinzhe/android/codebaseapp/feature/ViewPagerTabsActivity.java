@@ -25,40 +25,14 @@ import butterknife.ButterKnife;
 
 public class ViewPagerTabsActivity extends AppCompatActivity {
 
-    @Bind(R.id.container)
-    ViewPager mContainer;
-
-    private List<View> mTabViewList = new ArrayList<>();
     public String[] tabTexts = {"tab1", "tab2", "tab3"};
     public int[] tabImgIdNormla = {R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher};
     public int[] tabImgIdSelected = {R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher};
-
+    @Bind(R.id.container)
+    ViewPager mContainer;
+    private List<View> mTabViewList = new ArrayList<>();
     private List<BaseFragment> mFragmentList = new ArrayList<>();
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return tabTexts[position];
-        }
-
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,22 +84,22 @@ public class ViewPagerTabsActivity extends AppCompatActivity {
         });
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mContainer);
-
-        //init tab
-        for (int i = 0; i < tabLayout.getTabCount(); i++) {
-            TabLayout.Tab tab = tabLayout.getTabAt(i);
-            if (tab != null) {
-                View tabView = getTabView(i);
-                mTabViewList.add(tabView);
-                tab.setCustomView(tabView);
+        if (tabLayout != null) {
+            tabLayout.setupWithViewPager(mContainer);
+            //init tab
+            for (int i = 0; i < tabLayout.getTabCount(); i++) {
+                TabLayout.Tab tab = tabLayout.getTabAt(i);
+                if (tab != null) {
+                    View tabView = getTabView(i);
+                    mTabViewList.add(tabView);
+                    tab.setCustomView(tabView);
+                }
             }
         }
-
     }
 
     public View getTabView(int position) {
-        View v = LayoutInflater.from(this).inflate(R.layout.item_tab_home_view, null);
+        View v = LayoutInflater.from(this).inflate(R.layout.item_tab_home_view, mContainer);
         ImageView img = (ImageView) v.findViewById(R.id.iv_icon);
         TextView tv = (TextView) v.findViewById(R.id.tv_txt);
         tv.setText(tabTexts[position]);
@@ -142,7 +116,6 @@ public class ViewPagerTabsActivity extends AppCompatActivity {
         return v;
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_view_pager_tabs, menu);
@@ -158,5 +131,28 @@ public class ViewPagerTabsActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabTexts[position];
+        }
+
     }
 }
