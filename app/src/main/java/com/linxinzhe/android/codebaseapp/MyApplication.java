@@ -1,6 +1,7 @@
 package com.linxinzhe.android.codebaseapp;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
@@ -13,9 +14,18 @@ import com.umeng.analytics.MobclickAgent;
  */
 //public class MyApplication extends MultiDexApplication {
 public class MyApplication extends Application {
+
+    private static Context mContext;
+
+    public static Context getContext() {
+        return mContext;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+
+        mContext = getApplicationContext();
 
         if (BuildConfig.DEBUG) {
             Logger.init(getString(R.string.app_name));

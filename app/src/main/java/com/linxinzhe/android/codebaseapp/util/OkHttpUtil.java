@@ -9,12 +9,13 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.linxinzhe.android.codebaseapp.AppConfig;
+import com.linxinzhe.android.codebaseapp.MyApplication;
 import com.linxinzhe.android.codebaseapp.R;
-import com.orhanobut.logger.Logger;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyManagementException;
@@ -36,6 +37,8 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
+import okhttp3.Cache;
+import okhttp3.CacheControl;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Interceptor;
@@ -44,6 +47,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.logging.HttpLoggingInterceptor;
 import okio.Buffer;
 
 /**
@@ -59,32 +63,63 @@ public class OkHttpUtil {
     public static OkHttpClient getInstance() {
         if (mOkHttpClient == null) {
             synchronized (OkHttpUtil.class) {
-                mOkHttpClient = new OkHttpClient.Builder()
-                        .connectTimeout(30, TimeUnit.SECONDS)
-                        .readTimeout(30, TimeUnit.SECONDS)
-                        .writeTimeout(30, TimeUnit.SECONDS)
-                        .sslSocketFactory(getSSLSocketFactory(new Buffer().writeUtf8(OkHttpUtil.SERVER_CRT).inputStream()))//初始化https
-                        .addInterceptor(new Interceptor() {
-                            @Override
-                            public Response intercept(Chain chain) throws IOException {
-                                Request request = chain.request();
-                                long t1 = System.nanoTime();
-                                Logger.d(String.format("Sending request %s on %s%n%s", request.url(), chain.connection(), request.toString()));
+                HttpLoggingInterceptor logInterceptor = new HttpLoggingInterceptor();
+                logInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-                                Response response = chain.proceed(request);
-                                long t2 = System.nanoTime();
-                                Logger.d(String.format("Received response for %s in %.1fms%n%s", response.request().url(), (t2 - t1) / 1e6d, response.body().string()));
-                                return response;
-                            }
-                        })
+                File cacheFile = new File(MyApplication.getContext().getExternalCacheDir(), "ZhiBookCache");
+                Cache cache = new Cache(cacheFile, 1024 * 1024 * 50);
+                Interceptor cacheInterceptor = getCacheInterceptor();
+
+                mOkHttpClient = new OkHttpClient.Builder()
+                        .connectTimeout(15, TimeUnit.SECONDS)
+                        .readTimeout(15, TimeUnit.SECONDS)
+                        .writeTimeout(15, TimeUnit.SECONDS)
+                        .retryOnConnectionFailure(true)
+                        .addInterceptor(logInterceptor)
+                        .cache(cache)
+                        .addInterceptor(cacheInterceptor)
+                        .sslSocketFactory(getSSLSocketFactory(new Buffer().writeUtf8(OkHttpUtil.SERVER_CRT).inputStream()))//初始化https
                         .build();
             }
         }
         return mOkHttpClient;
     }
 
-    public interface OkhttpNetwork {
-        void connected();
+    private static Interceptor getCacheInterceptor() {
+        return new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                Request request = chain.request();
+                if (!isNetworkConnected(MyApplication.getContext())) {
+                    request = request.newBuilder()
+                            .cacheControl(CacheControl.FORCE_CACHE)
+                            .build();
+                }
+                Response response = chain.proceed(request);
+                if (isNetworkConnected(MyApplication.getContext())) {
+                    int maxAge = 0 * 60;
+                    // 有网络时 设置缓存超时时间0个小时
+                    response.newBuilder()
+                            .header("Cache-Control", "public, max-age=" + maxAge)
+                            .removeHeader("Pragma")// 清除头信息，因为服务器如果不支持，会返回一些干扰信息，不清除下面无法生效
+                            .build();
+                } else {
+                    // 无网络时，设置超时为4周
+                    int maxStale = 60 * 60 * 24 * 28;
+                    response.newBuilder()
+                            .header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)
+                            .removeHeader("Pragma")
+                            .build();
+                }
+                return response;
+            }
+        };
+    }
+
+    public static boolean isNetworkConnected(Context context) {
+        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
     }
 
     public static void isNetworkConnected(Context context, OkhttpNetwork network) {
@@ -170,13 +205,6 @@ public class OkHttpUtil {
                 }
             }
         });
-    }
-
-    /**
-     * callback when service response a 200 result
-     */
-    public interface HttpResponse {
-        void success(String result);
     }
 
     // -------------   HTTPS  -------------
@@ -308,6 +336,17 @@ public class OkHttpUtil {
             }
         }
         return null;
+    }
+
+    public interface OkhttpNetwork {
+        void connected();
+    }
+
+    /**
+     * callback when service response a 200 result
+     */
+    public interface HttpResponse {
+        void success(String result);
     }
 
     private static class MyTrustManager implements X509TrustManager {
