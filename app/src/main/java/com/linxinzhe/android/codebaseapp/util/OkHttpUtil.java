@@ -78,7 +78,7 @@ public class OkHttpUtil {
                         .addInterceptor(logInterceptor)
                         .cache(cache)
                         .addInterceptor(cacheInterceptor)
-                        .sslSocketFactory(getSSLSocketFactory(new Buffer().writeUtf8(OkHttpUtil.SERVER_CRT).inputStream()))//初始化https
+                        .sslSocketFactory(getSSLSocketFactory(new Buffer().writeUtf8(OkHttpUtil.SERVER_CRT).inputStream()))
                         .build();
             }
         }

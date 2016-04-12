@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">代码仓库App</string>
+    <string name="close_flash">关闭闪光</string>
+    <string name="open_flash">打开闪光</string>
+    <string name="section_format">你好世界从第: %1$d区</string>
+    <string name="select_camera">相机</string>
+    <string name="select_gallery">相册</string>
+    <string name="select_way">选择方式：</string>
+    <string name="toast_network_not_open">网络连接不可用，请检查网络环境</string>
+    <string name="toast_request_error">当前请求异常：</string>
+    <string name="toast_request_failed">当前请求失败</string>
+    <string name="toast_request_param_wrong">请求成功，返回参数问题</string>
+    <string name="toast_request_post_address_failed">服务器问题：请求地址变动</string>
+    <string name="toast_request_server_failed">请求服务器失败，错误码(code:%s)</string>
+    <string name="action_settings">设置</string>
+</resources>

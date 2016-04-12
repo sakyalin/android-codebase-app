@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    package="com.linxinzhe.android.codebaseapp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest package="com.linxinzhe.android.codebaseapp"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- 扫码 -->
     <uses-permission android:name="android.permission.CAMERA"/>
@@ -42,6 +41,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
@@ -49,6 +49,8 @@
             android:name=".feature.GuideActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".feature.UploadImgActivity">
         </activity>
     </application>
 

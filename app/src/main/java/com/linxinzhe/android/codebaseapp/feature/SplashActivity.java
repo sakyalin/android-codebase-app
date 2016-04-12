@@ -24,9 +24,6 @@ public class SplashActivity extends BaseActivity {
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
 
-        //友盟统计上传信息
-        /** 设置是否对日志信息进行加密, 默认false(不加密). */
-
         // 记录是否第一次启动
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
         boolean isFirstIn = preferences.getBoolean(AppConfig.SP_FIRST_RUN, true);

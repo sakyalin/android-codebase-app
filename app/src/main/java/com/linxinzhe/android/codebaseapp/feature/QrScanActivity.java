@@ -69,9 +69,9 @@ public class QrScanActivity extends BaseActivity implements ZXingScannerView.Res
         MenuItem menuItem;
 
         if (mFlash) {
-            menuItem = menu.add(Menu.NONE, R.id.menu_flash, 0, "关闭闪光");
+            menuItem = menu.add(Menu.NONE, R.id.menu_flash, 0, R.string.close_flash);
         } else {
-            menuItem = menu.add(Menu.NONE, R.id.menu_flash, 0, "打开闪光");
+            menuItem = menu.add(Menu.NONE, R.id.menu_flash, 0, R.string.open_flash);
         }
         MenuItemCompat.setShowAsAction(menuItem, MenuItem.SHOW_AS_ACTION_ALWAYS);
 
@@ -84,9 +84,9 @@ public class QrScanActivity extends BaseActivity implements ZXingScannerView.Res
             case R.id.menu_flash:
                 mFlash = !mFlash;
                 if (mFlash) {
-                    item.setTitle("关闭闪光");
+                    item.setTitle(R.string.close_flash);
                 } else {
-                    item.setTitle("打开闪光");
+                    item.setTitle(R.string.open_flash);
                 }
                 mScannerView.setFlash(mFlash);
                 return true;

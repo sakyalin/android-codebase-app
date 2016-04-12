@@ -24,13 +24,13 @@ public class CustomDialog extends Dialog {
      */
     public static Dialog selectWayDialog(Context context, String way1TextId, String way2TextId, final ButtonClick way1Click, final ButtonClick way2Click) {
         final CustomDialog dialog = new CustomDialog(context);
-        dialog.setTitle("Select way:");
+        dialog.setTitle(R.string.select_way);
         dialog.setContentView(R.layout.dialog_select_way);
 
-        Button way1 = (Button) dialog.findViewById(R.id.tv_way1_desc);
+        Button way1 = (Button) dialog.findViewById(R.id.btn_way1_desc);
         way1.setText(way1TextId);
 
-        Button way2 = (Button) dialog.findViewById(R.id.tv_way2_desc);
+        Button way2 = (Button) dialog.findViewById(R.id.btn_way2_desc);
         way2.setText(way2TextId);
 
         way1.setOnClickListener(new View.OnClickListener() {

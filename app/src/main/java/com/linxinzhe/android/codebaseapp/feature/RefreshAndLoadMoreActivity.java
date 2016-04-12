@@ -85,7 +85,7 @@ public class RefreshAndLoadMoreActivity extends BaseActivity {
     private void initRefreshAndLoadMoreListView() {
         //set Material style refresh header
         final MaterialHeader header = new MaterialHeader(this);
-        int[] colors = {this.getResources().getColor(R.color.colorPrimary), this.getResources().getColor(R.color.colorPrimaryDark), this.getResources().getColor(R.color.colorAccent)};
+        int[] colors = {getResources().getColor(R.color.colorPrimary), this.getResources().getColor(R.color.colorPrimaryDark), this.getResources().getColor(R.color.colorAccent)};
         header.setColorSchemeColors(colors);
         header.setLayoutParams(new PtrFrameLayout.LayoutParams(-1, -2));
         header.setPadding(0, LocalDisplay.dp2px(15), 0, LocalDisplay.dp2px(10));
