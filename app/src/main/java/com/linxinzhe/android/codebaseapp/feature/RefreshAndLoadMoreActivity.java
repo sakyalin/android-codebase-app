@@ -53,7 +53,6 @@ public class RefreshAndLoadMoreActivity extends BaseActivity {
     @Bind(R.id.lv_list)
     ListView mLvList;
 
-    private boolean needLoadMorePost = true;
     private int mStart = DATABASE_START;
     private List<BizModel> mBizModelList = new ArrayList<>();
     private BizModelAdapter mAdapter;
@@ -69,17 +68,6 @@ public class RefreshAndLoadMoreActivity extends BaseActivity {
         mLvList.setAdapter(mAdapter);
 
         initRefreshAndLoadMoreListView();
-    }
-
-    @Override
-    public void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        mPtrFrameRefreshListView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mPtrFrameRefreshListView.autoRefresh(true);
-            }
-        }, 150);
     }
 
     private void initRefreshAndLoadMoreListView() {
@@ -108,10 +96,9 @@ public class RefreshAndLoadMoreActivity extends BaseActivity {
                 frame.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        postMsgByPageForClear(frame);
+                        requestForClear(frame);
                     }
                 }, 10);
-
             }
         });
 
@@ -120,16 +107,18 @@ public class RefreshAndLoadMoreActivity extends BaseActivity {
         mLoadMoreListViewContainer.setLoadMoreHandler(new LoadMoreHandler() {
             @Override
             public void onLoadMore(LoadMoreContainer loadMoreContainer) {
-                if (needLoadMorePost) {
-                    int start = mStart + PAGE_LENGTH;
-                    int end = start + PAGE_LENGTH;
-                    postMsgByPageForLoadMore(start, end, loadMoreContainer);
-                } else {
-                    loadMoreContainer.loadMoreFinish(false, false);
-                }
+                int start = mStart + PAGE_LENGTH;
+                requestForLoadMore(start, loadMoreContainer);
             }
         });
 
+        // init data
+        mPtrFrameRefreshListView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mPtrFrameRefreshListView.autoRefresh(true);
+            }
+        }, 150);
     }
 
     @OnItemClick(R.id.lv_list)
@@ -138,7 +127,7 @@ public class RefreshAndLoadMoreActivity extends BaseActivity {
         // do business
     }
 
-    private void postMsgByPageForLoadMore(final int start, final int end, final LoadMoreContainer loadMoreContainer) {
+    private void requestForLoadMore(final int start, final LoadMoreContainer loadMoreContainer) {
         OkHttpUtil.isNetworkConnected(this, new OkHttpUtil.OkhttpNetwork() {
             @Override
             public void connected() {
@@ -155,23 +144,23 @@ public class RefreshAndLoadMoreActivity extends BaseActivity {
                             @Override
                             public void onCompleted() {
                                 mAdapter.notifyDataSetChanged();
-                                loadMoreContainer.loadMoreFinish(false, true);
                             }
 
                             @Override
                             public void onError(Throwable e) {
                                 showToast(getString(R.string.toast_request_error) + e.getMessage());
                                 Logger.d(e.getMessage());
-                                loadMoreContainer.loadMoreFinish(false, true);
+                                if (loadMoreContainer != null) {
+                                    loadMoreContainer.loadMoreFinish(false, true);
+                                }
                             }
 
                             @Override
-                            public void onNext(final List<BizModel> bizModelList) {
-                                if (bizModelList.size() < PAGE_LENGTH) {
-                                    needLoadMorePost = false;
-                                } else {
-                                    mStart = start;
-                                    mBizModelList.addAll(bizModelList);
+                            public void onNext(final List<BizModel> list) {
+                                mStart = start;
+                                mBizModelList.addAll(list);
+                                if (loadMoreContainer != null) {
+                                    loadMoreContainer.loadMoreFinish(false, !(list.size() < PAGE_LENGTH));
                                 }
                             }
                         });
@@ -179,12 +168,11 @@ public class RefreshAndLoadMoreActivity extends BaseActivity {
         });
     }
 
-    private void postMsgByPageForClear(final PtrFrameLayout frame) {
+    private void requestForClear(final PtrFrameLayout frame) {
         OkHttpUtil.isNetworkConnected(this, new OkHttpUtil.OkhttpNetwork() {
             @Override
             public void connected() {
                 final int start = DATABASE_START;
-                final int end = start + PAGE_LENGTH;
 
                 final Map<String, String> mapPost = new HashMap<>();
                 mapPost.put("start", String.valueOf(start));
@@ -198,11 +186,12 @@ public class RefreshAndLoadMoreActivity extends BaseActivity {
                         .subscribe(new Subscriber<List<BizModel>>() {
                             @Override
                             public void onCompleted() {
-                                needLoadMorePost = true;
-                                mLoadMoreListViewContainer.loadMoreFinish(false, needLoadMorePost);
                                 mAdapter.notifyDataSetChanged();
                                 if (frame != null) {
                                     frame.refreshComplete();
+                                }
+                                if (mLoadMoreListViewContainer != null) {
+                                    mLoadMoreListViewContainer.loadMoreFinish(false, true);
                                 }
                             }
 
@@ -212,6 +201,9 @@ public class RefreshAndLoadMoreActivity extends BaseActivity {
                                 Logger.d(e.getMessage());
                                 if (frame != null) {
                                     frame.refreshComplete();
+                                }
+                                if (mLoadMoreListViewContainer != null) {
+                                    mLoadMoreListViewContainer.loadMoreFinish(false, true);
                                 }
                             }
 
