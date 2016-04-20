@@ -2,6 +2,9 @@ apply plugin: 'com.android.application'
 apply plugin: 'im.fir.plugin.gradle'
 apply plugin: 'realm-android'
 
+def gitTag = 'git describe --tags'.execute([], project.rootDir).text.trim()
+def gitCommitCount = 100 + Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
+
 def releaseTime() {
     return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
 }
@@ -14,8 +17,8 @@ android {
         applicationId "com.linxinzhe.android.codebaseapp"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 1
-        versionName "0.1"
+        versionCode gitCommitCount
+        versionName gitTag
 //        multiDexEnabled true
         ndk {
             //设置支持的SO库架构
@@ -67,8 +70,14 @@ android {
     }
 
     packagingOptions {
+//        exclude 'proguard-project.txt'
+        exclude 'project.properties'
         exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/LICENSE'
         exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/DEPENDENCIES.txt'
+        exclude 'META-INF/DEPENDENCIES'
     }
 
     lintOptions {

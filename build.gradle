@@ -20,6 +20,11 @@ allprojects {
         jcenter()
         maven { url "https://jitpack.io" }
     }
+    tasks.withType(JavaCompile) {
+        options.encoding = "UTF-8"
+        sourceCompatibility = JavaVersion.VERSION_1_7
+        targetCompatibility = JavaVersion.VERSION_1_7
+    }
 }
 
 task clean(type: Delete) {
