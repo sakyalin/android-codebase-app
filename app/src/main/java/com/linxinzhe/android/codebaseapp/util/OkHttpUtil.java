@@ -8,7 +8,9 @@ import android.os.Looper;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.linxinzhe.android.codebaseapp.AppConfig;
+import com.linxinzhe.android.codebaseapp.BuildConfig;
 import com.linxinzhe.android.codebaseapp.MyApplication;
 import com.linxinzhe.android.codebaseapp.R;
 
@@ -47,7 +49,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.logging.HttpLoggingInterceptor;
 import okio.Buffer;
 
 /**
@@ -63,23 +64,23 @@ public class OkHttpUtil {
     public static OkHttpClient getInstance() {
         if (mOkHttpClient == null) {
             synchronized (OkHttpUtil.class) {
-                HttpLoggingInterceptor logInterceptor = new HttpLoggingInterceptor();
-                logInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-                File cacheFile = new File(MyApplication.getContext().getExternalCacheDir(), "ZhiBookCache");
+                File cacheFile = new File(MyApplication.getContext().getExternalCacheDir(), "MyCache");
                 Cache cache = new Cache(cacheFile, 1024 * 1024 * 50);
                 Interceptor cacheInterceptor = getCacheInterceptor();
 
-                mOkHttpClient = new OkHttpClient.Builder()
+                OkHttpClient.Builder builder = new OkHttpClient.Builder()
                         .connectTimeout(15, TimeUnit.SECONDS)
                         .readTimeout(15, TimeUnit.SECONDS)
                         .writeTimeout(15, TimeUnit.SECONDS)
                         .retryOnConnectionFailure(true)
-                        .addInterceptor(logInterceptor)
                         .cache(cache)
                         .addInterceptor(cacheInterceptor)
-                        .sslSocketFactory(getSSLSocketFactory(new Buffer().writeUtf8(OkHttpUtil.SERVER_CRT).inputStream()))
-                        .build();
+                        .sslSocketFactory(getSSLSocketFactory(new Buffer().writeUtf8(OkHttpUtil.SERVER_CRT).inputStream()));
+                if (BuildConfig.DEBUG) {
+                    mOkHttpClient = builder.addNetworkInterceptor(new StethoInterceptor()).build();
+                } else {
+                    mOkHttpClient = builder.build();
+                }
             }
         }
         return mOkHttpClient;

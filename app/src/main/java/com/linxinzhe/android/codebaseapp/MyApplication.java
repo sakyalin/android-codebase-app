@@ -3,6 +3,7 @@ package com.linxinzhe.android.codebaseapp;
 import android.app.Application;
 import android.content.Context;
 
+import com.facebook.stetho.Stetho;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 import com.tencent.bugly.crashreport.CrashReport;
@@ -32,6 +33,9 @@ public class MyApplication extends Application {
         } else {
             Logger.init(getString(R.string.app_name)).logLevel(LogLevel.NONE);
         }
+
+        //stetho
+        Stetho.initializeWithDefaults(this);
 
         //umeng
         AnalyticsConfig.setAppkey(getApplicationContext(), "APPID");

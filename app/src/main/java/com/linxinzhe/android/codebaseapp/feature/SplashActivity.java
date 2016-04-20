@@ -34,6 +34,7 @@ public class SplashActivity extends BaseActivity {
                 @Override
                 public void call(Long aLong) {
                     startActivity(GuideActivity.class);
+                    finish();
                 }
             });
             preferences.edit().putBoolean(AppConfig.SP_FIRST_RUN, false).apply();
@@ -41,7 +42,8 @@ public class SplashActivity extends BaseActivity {
             Observable.timer(1, TimeUnit.SECONDS).subscribe(new Action1<Long>() {
                 @Override
                 public void call(Long aLong) {
-                    startActivity(ViewPagerTabsActivity.class);
+                    startActivity(MainActivity.class);
+                    finish();
                 }
             });
         }

@@ -16,6 +16,8 @@
 #   public *;
 #}
 
+-keep class com.linxinzhe.android.codebaseapp.** { *; }
+
 # ----- butterknife ----- #
 -keep class butterknife.** { *; }
 -dontwarn butterknife.internal.**

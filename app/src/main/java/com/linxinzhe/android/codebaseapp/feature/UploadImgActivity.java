@@ -11,6 +11,7 @@ import com.linxinzhe.android.codebaseapp.view.CustomDialog;
 import java.io.File;
 import java.util.List;
 
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.finalteam.galleryfinal.GalleryFinal;
 import cn.finalteam.galleryfinal.model.PhotoInfo;
@@ -34,6 +35,7 @@ public class UploadImgActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_img);
+        ButterKnife.bind(this);
     }
 
     @OnClick(R.id.btn_upload_img)

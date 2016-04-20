@@ -22,6 +22,14 @@ public class BaseActivity extends AppCompatActivity {
 
         ActivityHelper.instance().add(this);
 
+        setActionBarUpButton();
+    }
+
+    protected void setActionBarUpButton() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     protected void setActionBarWithTitle(String title) {

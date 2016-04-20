@@ -14,6 +14,7 @@ import com.linxinzhe.android.codebaseapp.base.BaseActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
@@ -36,6 +37,7 @@ public class GuideActivity extends BaseActivity implements View.OnClickListener,
         super.onCreate(savedInstanceState);
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);//去标题
         setContentView(R.layout.activity_guide);
+        ButterKnife.bind(this);
 
         List<View> views = new ArrayList<>();
 
@@ -64,7 +66,8 @@ public class GuideActivity extends BaseActivity implements View.OnClickListener,
 
     @OnClick(R.id.btn_skip_guide)
     public void skipGuide(View view) {
-        startActivity(ViewPagerTabsActivity.class);
+        startActivity(MainActivity.class);
+        finish();
     }
 
     private void initDots() {
@@ -151,7 +154,6 @@ public class GuideActivity extends BaseActivity implements View.OnClickListener,
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            super.destroyItem(container, position, object);
             container.removeView(views.get(position));
         }
 
@@ -161,7 +163,6 @@ public class GuideActivity extends BaseActivity implements View.OnClickListener,
             if (views != null) {
                 return views.size();
             }
-
             return 0;
         }
 

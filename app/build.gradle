@@ -17,8 +17,10 @@ android {
         applicationId "com.linxinzhe.android.codebaseapp"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode gitCommitCount
-        versionName gitTag
+//        versionCode gitCommitCount
+//        versionName gitTag
+        versionCode 1
+        versionName "0.5"
 //        multiDexEnabled true
         ndk {
             //设置支持的SO库架构
@@ -45,6 +47,7 @@ android {
         release {
             minifyEnabled false
             shrinkResources false
+            useProguard true
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -102,6 +105,12 @@ dependencies {
     compile 'com.android.support:support-v4:23.3.0'
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
+
+    compile 'com.facebook.stetho:stetho:1.3.1'
+    compile 'com.facebook.stetho:stetho-okhttp3:1.3.1'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
 
     compile 'io.reactivex:rxandroid:1.1.0'
 

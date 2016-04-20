@@ -10,14 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <Button
-        android:id="@+id/btn_skip_guide"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginBottom="30dp"
-        android:background="@drawable/ic_skip_guide"/>
-
     <LinearLayout
         android:id="@+id/ll_points"
         android:layout_width="wrap_content"
@@ -49,8 +41,13 @@
             android:clickable="true"
             android:padding="10.0dp"
             android:src="@drawable/selector_point"/>
-
-
     </LinearLayout>
 
+    <Button
+        android:id="@+id/btn_skip_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/ic_skip_guide"/>
 </FrameLayout>
