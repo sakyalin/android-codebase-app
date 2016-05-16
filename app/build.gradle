@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'im.fir.plugin.gradle'
 apply plugin: 'realm-android'
+apply plugin: 'com.neenbedankt.android-apt'
 
 def gitTag = 'git describe --tags'.execute([], project.rootDir).text.trim()
 def gitCommitCount = 100 + Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
@@ -102,9 +103,9 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     //    compile 'com.android.support:multidex:1.0.1'
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:support-v4:23.3.0'
-    compile 'com.android.support:appcompat-v7:23.3.0'
-    compile 'com.android.support:design:23.3.0'
+    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:design:23.4.0'
 
     compile 'com.facebook.stetho:stetho:1.3.1'
     compile 'com.facebook.stetho:stetho-okhttp3:1.3.1'
@@ -112,28 +113,33 @@ dependencies {
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
 
-    compile 'io.reactivex:rxandroid:1.1.0'
+    compile 'io.reactivex:rxandroid:1.2.0'
+    compile 'io.reactivex:rxjava:1.1.5'
 
-    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.jakewharton:butterknife:8.0.1'
+    apt 'com.jakewharton:butterknife-compiler:8.0.1'
+
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.squareup.okio:okio:1.7.0'
+    compile 'com.squareup.okio:okio:1.8.0'
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
-    compile 'com.squareup.retrofit2:retrofit:2.0.1'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.1'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.1'
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
 
     compile 'com.github.orhanobut:logger:1.12'
 
     compile 'org.greenrobot:eventbus:3.0.0'
 
-    compile 'in.srain.cube:ultra-ptr:1.0.10'
+    compile 'in.srain.cube:ultra-ptr:1.0.11'
     compile 'in.srain.cube:cube-sdk:1.0.44@aar'
 
     compile 'com.umeng.analytics:analytics:latest.integration'
-    compile 'com.tencent.bugly:crashreport:1.2.9'
+    compile 'com.tencent.bugly:crashreport:latest.release'
 
     compile 'me.dm7.barcodescanner:zxing:1.8.3'
 
-    compile 'cn.finalteam:galleryfinal:1.4.3'
+    compile 'cn.finalteam:galleryfinal:1.4.8.7'
+
+    compile 'io.realm:android-adapters:1.0.1'
 }

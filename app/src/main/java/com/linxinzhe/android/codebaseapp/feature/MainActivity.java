@@ -7,23 +7,23 @@ import android.widget.Button;
 import com.linxinzhe.android.codebaseapp.R;
 import com.linxinzhe.android.codebaseapp.base.BaseActivity;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity {
 
-    @Bind(R.id.btn_go_splash)
+    @BindView(R.id.btn_go_splash)
     Button mBtnGoSplash;
-    @Bind(R.id.btn_go_guide)
+    @BindView(R.id.btn_go_guide)
     Button mBtnGoGuide;
-    @Bind(R.id.btn_go_viewpager_tabs)
+    @BindView(R.id.btn_go_viewpager_tabs)
     Button mBtnGoViewpagerTabs;
-    @Bind(R.id.btn_go_refresh_and_load_more)
+    @BindView(R.id.btn_go_refresh_and_load_more)
     Button mBtnGoRefreshAndLoadMore;
-    @Bind(R.id.btn_go_qr_scan)
+    @BindView(R.id.btn_go_qr_scan)
     Button mBtnGoQrScan;
-    @Bind(R.id.btn_go_upload_img)
+    @BindView(R.id.btn_go_upload_img)
     Button mBtnGoUploadImg;
 
     @Override

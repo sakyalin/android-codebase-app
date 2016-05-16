@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
-import android.widget.Toast;
 
-import com.linxinzhe.android.codebaseapp.BuildConfig;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -17,23 +19,21 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
 
 import cn.finalteam.galleryfinal.CoreConfig;
 import cn.finalteam.galleryfinal.FunctionConfig;
 import cn.finalteam.galleryfinal.GalleryFinal;
 import cn.finalteam.galleryfinal.ImageLoader;
 import cn.finalteam.galleryfinal.ThemeConfig;
-import cn.finalteam.galleryfinal.model.PhotoInfo;
 import cn.finalteam.galleryfinal.widget.GFImageView;
 
 /**
  * @author linxinzhe on 4/3/16.
  */
 public class ImgUtil {
-    public static final int REQUEST_CODE_CAMERA = 1;
-    public static final int REQUEST_CODE_GALLERY = 2;
-    public static final int REQUEST_CODE_CROP = 3;
+    public static final int REQUEST_CODE_CAMERA = 10001;
+    public static final int REQUEST_CODE_GALLERY = 10002;
+    public static final int REQUEST_CODE_CROP = 10003;
 
     public static void openImgTaker(final Context context, int isGalleryOrCamera, final GalleryFinal.OnHanlderResultCallback onHanlderResultCallback) {
         ThemeConfig theme = new ThemeConfig.Builder().build();
@@ -49,33 +49,13 @@ public class ImgUtil {
                 .setEnablePreview(true).build();
 
         ImageLoader imageloader = new PicassoImageLoader();
-        CoreConfig coreConfig = new CoreConfig.Builder(context, imageloader, theme).setDebug(BuildConfig.DEBUG).setFunctionConfig(functionConfig).build();
+        CoreConfig coreConfig = new CoreConfig.Builder(context, imageloader, theme).setFunctionConfig(functionConfig).build();
         GalleryFinal.init(coreConfig);
 
         if (isGalleryOrCamera == REQUEST_CODE_GALLERY) {
             GalleryFinal.openGallerySingle(REQUEST_CODE_GALLERY, functionConfig, onHanlderResultCallback);
         } else if (isGalleryOrCamera == REQUEST_CODE_CAMERA) {
-            GalleryFinal.openCamera(REQUEST_CODE_CAMERA, functionConfig, new GalleryFinal.OnHanlderResultCallback() {
-                @Override
-                public void onHanlderSuccess(int reqeustCode, List<PhotoInfo> resultList) {
-                    String selectedImgAbsPath = resultList.get(0).getPhotoPath();
-
-                    FunctionConfig functionConfig = new FunctionConfig.Builder()
-                            .setEnableCamera(false)
-                            .setEnableEdit(true)
-                            .setEnableCrop(true)
-                            .setCropSquare(true)
-                            .setEnableRotate(true)
-                            .setEnablePreview(true).build();
-
-                    GalleryFinal.openCrop(REQUEST_CODE_CROP, functionConfig, selectedImgAbsPath, onHanlderResultCallback);
-                }
-
-                @Override
-                public void onHanlderFailure(int requestCode, String errorMsg) {
-                    Toast.makeText(context, errorMsg, Toast.LENGTH_SHORT).show();
-                }
-            });
+            GalleryFinal.openCamera(REQUEST_CODE_CAMERA, functionConfig, onHanlderResultCallback);
         }
     }
 
@@ -104,6 +84,9 @@ public class ImgUtil {
         }
     }
 
+    /**
+     * galleryfinal: picasso support
+     */
     static class PicassoImageLoader implements cn.finalteam.galleryfinal.ImageLoader {
 
         private Bitmap.Config mConfig;
@@ -131,6 +114,44 @@ public class ImgUtil {
 
         @Override
         public void clearMemoryCache() {
+        }
+    }
+
+    /**
+     * circle imageView transformer
+     */
+    public static class CircleTransform implements Transformation {
+        @Override
+        public Bitmap transform(Bitmap source) {
+            int size = Math.min(source.getWidth(), source.getHeight());
+
+            int x = (source.getWidth() - size) / 2;
+            int y = (source.getHeight() - size) / 2;
+
+            Bitmap squaredBitmap = Bitmap.createBitmap(source, x, y, size, size);
+            if (squaredBitmap != source) {
+                source.recycle();
+            }
+
+            Bitmap bitmap = Bitmap.createBitmap(size, size, source.getConfig());
+
+            Canvas canvas = new Canvas(bitmap);
+            Paint paint = new Paint();
+            BitmapShader shader = new BitmapShader(squaredBitmap,
+                    BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP);
+            paint.setShader(shader);
+            paint.setAntiAlias(true);
+
+            float r = size / 2f;
+            canvas.drawCircle(r, r, r, paint);
+
+            squaredBitmap.recycle();
+            return bitmap;
+        }
+
+        @Override
+        public String key() {
+            return "circle";
         }
     }
 }

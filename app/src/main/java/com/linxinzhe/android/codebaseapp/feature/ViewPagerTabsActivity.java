@@ -20,7 +20,7 @@ import com.linxinzhe.android.codebaseapp.base.BaseFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ViewPagerTabsActivity extends AppCompatActivity {
@@ -28,7 +28,7 @@ public class ViewPagerTabsActivity extends AppCompatActivity {
     public String[] tabTexts = {"tab1", "tab2", "tab3"};
     public int[] tabImgIdNormla = {R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher};
     public int[] tabImgIdSelected = {R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher};
-    @Bind(R.id.container)
+    @BindView(R.id.container)
     ViewPager mContainer;
     private List<View> mTabViewList = new ArrayList<>();
     private List<BaseFragment> mFragmentList = new ArrayList<>();

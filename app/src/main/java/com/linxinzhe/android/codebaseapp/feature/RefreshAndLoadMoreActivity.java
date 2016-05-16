@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import in.srain.cube.util.LocalDisplay;
@@ -46,11 +46,11 @@ public class RefreshAndLoadMoreActivity extends BaseActivity {
     private static final int DATABASE_START = 0;
     private static final int PAGE_LENGTH = 10;
 
-    @Bind(R.id.load_more_list_view_container)
+    @BindView(R.id.load_more_list_view_container)
     LoadMoreListViewContainer mLoadMoreListViewContainer;
-    @Bind(R.id.ptr_frame_refresh_list_view)
+    @BindView(R.id.ptr_frame_refresh_list_view)
     PtrClassicFrameLayout mPtrFrameRefreshListView;
-    @Bind(R.id.lv_list)
+    @BindView(R.id.lv_list)
     ListView mLvList;
 
     private int mStart = DATABASE_START;
@@ -263,7 +263,7 @@ public class RefreshAndLoadMoreActivity extends BaseActivity {
         }
 
         static class ViewHolder {
-            @Bind(android.R.id.text1)
+            @BindView(android.R.id.text1)
             TextView tvText;
 
             public ViewHolder(View view) {
