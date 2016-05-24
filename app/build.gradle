@@ -46,7 +46,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             shrinkResources false
             useProguard true
             signingConfig signingConfigs.release
@@ -89,8 +89,8 @@ android {
     }
 
     productFlavors {
-        xxx {
-            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "xxx", XXXMAP_API_KEY: "xxx"]
+        umeng {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "umeng", XXXMAP_API_KEY: "xxx"]
         }
     }
 }

@@ -16,6 +16,15 @@
 #   public *;
 #}
 
+#-------------------------------------------定制化区域----------------------------------------------
+#---------------------------------1.实体类---------------------------------
+
+-keep class com.linxinzhe.android.codebaseapp.model.** { *; }
+
+#-------------------------------------------------------------------------
+
+#---------------------------------2.第三方包-------------------------------
+
 # ----- gson ----- #
 ##---------------Begin: proguard configuration for Gson  ----------
 # Gson uses generic type information stored in a class file when working with fields. Proguard
@@ -30,7 +39,6 @@
 #-keep class com.google.gson.stream.** { *; }
 
 # Application classes that will be serialized/deserialized over Gson
--keep class com.linxinzhe.android.codebaseapp.model.** { *; }
 
 ##---------------End: proguard configuration for Gson  ----------
 # ----- gson ----- #
@@ -58,7 +66,14 @@
 # -----  Okhttp  ----- #
 -keep class com.squareup.okhttp.** { *; }
 -keep interface com.squareup.okhttp.** { *; }
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
 # -----  Okhttp  ----- #
+
+# -----  okio  ----- #
+-dontwarn okio.**
+-keep class okio.** { *; }
+# -----  okio  ----- #
 
 # -----  retrofit  ----- #
 -dontwarn retrofit2.**
@@ -93,11 +108,8 @@
 # ----- realm ----- #
 
 # ----- utraptr ----- #
--keep class in.srain.*
--dontwarn class in.srain.cube.image.ImageProvider
--dontwarn class android.graphics.Bitmap
--ignorewarnings class in.srain.cube.image.ImageProvider
--ignorewarnings class android.graphics.Bitmap
+-dontwarn in.srain.**
+-keep class in.srain.** { *; }
 # ----- utraptr ----- #
 
 
@@ -130,15 +142,32 @@
 -keep class cn.finalteam.galleryfinal.widget.zoonview.*{*;}
 # ----- galleryfinal ----- #
 
+# ----- logger ----- #
+-dontwarn com.orhanobut.logger.**
+-keep class com.orhanobut.logger.**{*;}
+# ----- logger ----- #
 
-#-------------------------------------------定制化区域----------------------------------------------
-#---------------------------------1.实体类---------------------------------
+# ----- rx ----- #
+-dontwarn sun.misc.**
 
+-keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
+   long producerIndex;
+   long consumerIndex;
+}
 
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode producerNode;
+}
 
-#-------------------------------------------------------------------------
+-keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
+    rx.internal.util.atomic.LinkedQueueNode consumerNode;
+}
+# ----- rx ----- #
 
-#---------------------------------2.第三方包-------------------------------
+# ----- zxing ----- #
+-dontwarn me.dm7.barcodescanner.zxing.**
+-keep class me.dm7.barcodescanner.zxing.**{*;}
+# ----- zxing ----- #
 
 
 

@@ -7,7 +7,6 @@ import com.facebook.stetho.Stetho;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 import com.tencent.bugly.crashreport.CrashReport;
-import com.umeng.analytics.AnalyticsConfig;
 import com.umeng.analytics.MobclickAgent;
 
 /**
@@ -38,11 +37,10 @@ public class MyApplication extends Application {
         Stetho.initializeWithDefaults(this);
 
         //umeng
-        AnalyticsConfig.setAppkey(getApplicationContext(), "APPID");
-        MobclickAgent.setDebugMode(true);
-        AnalyticsConfig.enableEncrypt(true);
+        MobclickAgent.setDebugMode(BuildConfig.DEBUG);
+        MobclickAgent.enableEncrypt(true);
 
         //bugly
-        CrashReport.initCrashReport(getApplicationContext(), "注册时申请的APPID", false);
+        CrashReport.initCrashReport(getApplicationContext(), "900031572", false);
     }
 }
