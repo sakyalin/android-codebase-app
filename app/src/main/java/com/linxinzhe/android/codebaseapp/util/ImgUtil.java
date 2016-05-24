@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 
+import com.linxinzhe.android.codebaseapp.R;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
@@ -36,7 +37,16 @@ public class ImgUtil {
     public static final int REQUEST_CODE_CROP = 10003;
 
     public static void openImgTaker(final Context context, int isGalleryOrCamera, final GalleryFinal.OnHanlderResultCallback onHanlderResultCallback) {
-        ThemeConfig theme = new ThemeConfig.Builder().build();
+        ThemeConfig theme = new ThemeConfig.Builder()
+                .setTitleBarBgColor(context.getResources().getColor(R.color.colorPrimary))
+                .setTitleBarTextColor(context.getResources().getColor(R.color.white))
+                .setTitleBarIconColor(context.getResources().getColor(R.color.white))
+                .setCheckNornalColor(context.getResources().getColor(R.color.colorPrimary))
+                .setCheckSelectedColor(context.getResources().getColor(R.color.colorPrimaryDark))
+                .setCropControlColor(context.getResources().getColor(R.color.colorPrimary))
+                .setFabNornalColor(context.getResources().getColor(R.color.colorPrimary))
+                .setFabPressedColor(context.getResources().getColor(R.color.colorPrimaryDark))
+                .build();
 
         FunctionConfig functionConfig = new FunctionConfig.Builder()
                 .setEnableCamera(isGalleryOrCamera == REQUEST_CODE_CAMERA)
