@@ -32,5 +32,6 @@
     <string name="minute" msgid="2486157997434653710">"1 minute ago"</string>
     <string name="minutes" msgid="6115838729146292526">"<xliff:g id="MINUTES">%s</xliff:g> minutes ago"</string>
     <string name="every_day" msgid="4100909974923444602">"Every day"</string>
+    <string name="tip_double_click_exit">再次点击则退出</string>
 
 </resources>

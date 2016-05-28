@@ -1,11 +1,18 @@
 package com.linxinzhe.android.codebaseapp.feature;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.linxinzhe.android.codebaseapp.R;
 import com.linxinzhe.android.codebaseapp.base.BaseActivity;
+
+import java.lang.ref.WeakReference;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -61,5 +68,68 @@ public class MainActivity extends BaseActivity {
     @OnClick(R.id.btn_go_upload_img)
     public void goUploadImg(View view) {
         startActivity(UploadImgActivity.class);
+    }
+
+    private boolean isOnKeyBacking;
+    private Toast mBackToast;
+    private Runnable onBackTimeRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+            isOnKeyBacking = false;
+            if (mBackToast != null) {
+                mBackToast.cancel();
+            }
+        }
+    };
+
+    private static final int MSG_DO1 = 1001;
+    private final MyHandler mHandler = new MyHandler(this);
+
+    private static class MyHandler extends Handler {
+        private final WeakReference<MainActivity> mActivity;
+
+        public MyHandler(MainActivity activity) {
+            mActivity = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            MainActivity activity = mActivity.get();
+            if (activity != null) {
+                switch (msg.what) {
+                    case MSG_DO1:
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode != KeyEvent.KEYCODE_BACK) {
+            return false;
+        }
+        if (isOnKeyBacking) {
+            mHandler.removeCallbacks(onBackTimeRunnable);
+            if (mBackToast != null) {
+                mBackToast.cancel();
+            }
+            // double click log out
+            setResult(Activity.RESULT_OK);
+            finish();
+            return true;
+        } else {
+            isOnKeyBacking = true;
+            if (mBackToast == null) {
+                mBackToast = Toast.makeText(this, getString(R.string.tip_double_click_exit), Toast.LENGTH_LONG);
+            }
+            mBackToast.show();
+            mHandler.postDelayed(onBackTimeRunnable, 2000);
+            return true;
+        }
     }
 }
