@@ -33,5 +33,6 @@
     <string name="minutes" msgid="6115838729146292526">"<xliff:g id="MINUTES">%s</xliff:g> minutes ago"</string>
     <string name="every_day" msgid="4100909974923444602">"Every day"</string>
     <string name="tip_double_click_exit">tip double click exit</string>
+    <string name="show_click_somewhere_to_hide_keyboard">show click somewhere to hide keyboard</string>
 
 </resources>

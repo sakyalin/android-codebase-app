@@ -33,4 +33,5 @@
     <string name="minutes" msgid="6115838729146292526">"<xliff:g id="MINUTES">%s</xliff:g>分钟前"</string>
     <string name="every_day" msgid="4100909974923444602">"每天"</string>
     <string name="tip_double_click_exit">再次点击则退出</string>
+    <string name="show_click_somewhere_to_hide_keyboard">点击其它区域收起键盘</string>
 </resources>
