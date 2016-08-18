@@ -1,10 +1,12 @@
 package com.linxinzhe.android.codebaseapp.feature;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +17,9 @@ import android.widget.Toast;
 
 import com.linxinzhe.android.codebaseapp.R;
 import com.linxinzhe.android.codebaseapp.base.BaseActivity;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.lang.ref.WeakReference;
 
@@ -42,6 +47,12 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+//        umeng share permission
+        String[] mPermissionList = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CALL_PHONE, Manifest.permission.READ_LOGS, Manifest.permission.READ_PHONE_STATE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.SET_DEBUG_APP, Manifest.permission.SYSTEM_ALERT_WINDOW, Manifest.permission.GET_ACCOUNTS};
+        ActivityCompat.requestPermissions(MainActivity.this, mPermissionList, 100);
+//        umeng share permission
+
     }
 
     @OnClick(R.id.btn_go_splash)
@@ -73,6 +84,39 @@ public class MainActivity extends BaseActivity {
     public void goUploadImg(View view) {
         startActivity(UploadImgActivity.class);
     }
+
+    @OnClick(R.id.btn_umeng_share)
+    public void umengShare(View view) {
+        final SHARE_MEDIA[] displaylist = new SHARE_MEDIA[]
+                {
+                        SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.SINA,
+                        SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE
+                };
+        new ShareAction(this).setDisplayList(displaylist)
+                .withText("内容")
+                .withTitle("标题")
+                .withTargetUrl("http://www.baidu.com")
+//                .withMedia( image )
+                .setListenerList(umShareListener)
+                .open();
+    }
+
+    UMShareListener umShareListener = new UMShareListener() {
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            showToast(platform + " 分享成功啦");
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            showToast(platform + " 分享失败啦");
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            showToast(platform + " 分享取消了");
+        }
+    };
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
